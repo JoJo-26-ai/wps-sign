@@ -1,0 +1,25 @@
+name: WPS 每日签到
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run WPS sign
+        env:
+          WPS_SID: ${{ secrets.WPS_SID }}
+        run: python wps_sign.py
