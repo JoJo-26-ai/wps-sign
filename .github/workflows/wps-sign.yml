@@ -2,12 +2,16 @@ name: WPS 每日签到
 
 on:
   schedule:
+    # 每天 08:00 UTC (即北京时间 16:00)，可自行修改
     - cron: "0 8 * * *"
-  workflow_dispatch:
+  workflow_dispatch:  # 支持手动触发
 
 jobs:
   sign:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v4
 
@@ -22,4 +26,5 @@ jobs:
       - name: Run WPS sign
         env:
           WPS_SID: ${{ secrets.WPS_SID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python wps_sign.py
